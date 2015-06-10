@@ -1,0 +1,176 @@
+$icon-font-path: '../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/';
+
+// bower:scss
+@import "../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+@import "../../bower_components/sass-flex-mixin/flex.scss";
+// endbower
+
+$bellini: rgb(251, 190, 169);
+$main-bg-color: $bellini;
+$about-bg-color: rgb(208, 234, 229);
+$pictures-bg-color: rgb(198, 191, 185);
+$info-bg-color: rgb(167, 200, 202);
+$rsvp-bg-color: rgb(246, 219, 209);
+
+$coal-color: rgb(103, 103, 103);
+
+$navbar-offset: 52px;
+
+#main {
+  font-size: 24px;
+}
+
+.navbar-default {
+  background-color: $coal-color;
+  border-color: $coal-color;
+  opacity: 0.8;
+
+  .navbar-nav > li > a {
+    color: #ffffff;
+
+    &:hover {
+      color: #cccccc;
+    }
+  }
+}
+/* Space out content a bit */
+html, body {
+  padding-top: 0px;
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .navbar-nav {
+    float: none;
+    margin: 0 auto;
+    display: table;
+    table-layout: fixed;
+  }
+}
+
+.slides {
+  height: 100%;
+
+}
+
+.page-slide {
+  position: relative;
+  min-height: 100%;
+  padding-top: $navbar-offset;
+  padding-bottom: 20px;
+
+  @include flexbox;
+  @include flex-flow(row wrap);
+
+  @include align-items(baseline);
+  & > * {
+    @include flex(1, 100%);
+  }
+
+  & > .slide-title {
+    text-align: center;
+    @include align-self(flex-start);
+    margin-bottom: 50px;
+    font-variant: small-caps;
+  }
+
+  & > .slide-content {
+    @include align-self(center);
+    text-align: center;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+#main {
+  background-color: $main-bg-color;
+}
+
+#pictures {
+  background-color: $pictures-bg-color;
+}
+
+$smallest-break: 600px;
+$med-break: 800px;
+
+#aboutus {
+  background-color: $about-bg-color;
+
+  & > .aboutus-aside, .aboutus-main {
+    padding: 10px;
+    text-align: center;
+  }
+  & > .aboutus-aside {
+    @media all and (min-width: $smallest-break) {
+      flex: 1 auto;
+    }
+  }
+  & > #howwemet {
+    width: 40%;
+    @media all and (min-width: $med-break) {
+      flex: 3 300px;
+      order: 2;
+    }
+  }
+
+  & > #aboutana {
+    width: 30%;
+
+    @media all and (min-width: $med-break) {
+      order: 1;
+    }
+  }
+
+  & > #aboutnick {
+    width: 30%;
+    @media all and (min-width: $med-break) {
+      order: 3;
+    } 
+  }
+}
+
+#info {
+  background-color: $info-bg-color;
+
+
+  #venue-map {
+    width: 100%;
+  }
+
+  .event-info {
+    width: 100%
+  }
+  @media all and (min-width: $smallest-break) {
+    .slide-content {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    .event-info {
+      width: 50%;
+      order: 1;
+      flex: 1;
+    }
+
+    #venue-map {
+      width: 50%;
+      order: 2;
+      flex: 1;
+    }
+  }
+
+
+
+  .venue-address {
+    line-height: 110%;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+}
+
+#rsvp {
+  background-color: $rsvp-bg-color;
+}
