@@ -1,8 +1,8 @@
 $icon-font-path: '../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/';
 
 // bower:scss
+@import "../../bower_components/sass-flex-mixin/_flexbox.scss";
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
-@import "../../bower_components/sass-flex-mixin/flex.scss";
 // endbower
 
 $bellini: rgb(251, 190, 169);
@@ -18,6 +18,15 @@ $navbar-offset: 52px;
 
 #main {
   font-size: 24px;
+}
+
+.rsvp-form {
+  label {
+    input {
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+  }
 }
 
 .navbar-default {
