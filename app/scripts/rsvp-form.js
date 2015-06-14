@@ -31,7 +31,20 @@ class RsvpSearch extends React.Component {
       comments: React.findDOMNode( this.refs.comments ).value.trim()
     }
 
-    console.log( data );
+    self.fetch( '/api/rsvp', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify( data )
+    })
+    .then( function() {
+      console.log( 'success' );
+    })
+    .error( function() {
+      console.log( 'failed' );
+    });
   }
 
   render() {
