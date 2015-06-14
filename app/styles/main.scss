@@ -18,14 +18,9 @@ $navbar-offset: 52px;
 
 #main {
   font-size: 24px;
-}
 
-.rsvp-form {
-  label {
-    input {
-      margin-left: 5px;
-      margin-right: 5px;
-    }
+  .slide-content {
+     @include align-self(center);
   }
 }
 
@@ -84,7 +79,7 @@ html, body {
   }
 
   & > .slide-content {
-    @include align-self(center);
+    @include align-self(flex-start);
     text-align: center;
   }
 }
@@ -94,7 +89,40 @@ img {
 }
 
 #main {
+  position: relative;
   background-color: $main-bg-color;
+
+  &:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    content: '';
+    z-index: 0;
+
+    background-size: cover;
+    background-image: url(/images/lunaheader.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: $main-bg-color;
+
+    transform: scale( 1.03 );
+    filter: blur( 5px );
+    overflow: hidden;
+  }
+  
+  .slide-content {
+    z-index: 1;
+  }
+
+  &.page-slide {
+    min-height: 761px;    
+  }
+  
+  .slide-content {
+    background-color: $main-bg-color;
+  }
 }
 
 #pictures {
@@ -182,4 +210,15 @@ $med-break: 800px;
 
 #rsvp {
   background-color: $rsvp-bg-color;
+
+  #rsvp-form {
+    min-height: 300px;
+    
+    label {
+      input {
+        margin-left: 5px;
+        margin-right: 5px;
+      }
+    }
+  }
 }
