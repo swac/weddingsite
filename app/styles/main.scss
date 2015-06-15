@@ -63,6 +63,8 @@ html, body {
   padding-top: $navbar-offset;
   padding-bottom: 20px;
 
+  overflow: hidden;
+
   @include flexbox;
   @include flex-flow(row wrap);
 
@@ -101,7 +103,7 @@ img {
     content: '';
     z-index: 0;
 
-    margin: -5px;
+    margin: -8px;
 
     background-size: cover;
     background-image: url(/images/lunaheader.jpg);
@@ -118,7 +120,7 @@ img {
   }
 
   &.page-slide {
-    min-height: 761px;    
+    min-height: 761px;   
   }
   
   .slide-content {
