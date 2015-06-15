@@ -11,7 +11,9 @@ class RsvpSearch extends React.Component {
     this.state = {
       attending: null,
       foundGroup: null,
-      searched: false
+      searched: false,
+      submitted: false,
+      submissionError: false
     };
   }
 
@@ -39,18 +41,18 @@ class RsvpSearch extends React.Component {
       },
       body: JSON.stringify( data )
     })
-    .then( function() {
-      console.log( 'success' );
+    .then( () => {
+      this.setState({ submitted: true });
     })
-    .error( function() {
-      console.log( 'failed' );
+    .error( () => {
+      this.setState({ submissionError: true });
     });
   }
 
   render() {
-    let showError;
+    let showSearchError;
     if ( !this.state.foundGroup && this.state.searched ) {
-      showError = <div>Could not find group! Please search again or contact us at anaandnick@gmail.com</div>;
+      showSearchError = <div>Could not find group! Please search again or contact us at anaandnick@gmail.com</div>;
     }
 
     let rsvpInfo;
@@ -66,15 +68,11 @@ class RsvpSearch extends React.Component {
           <label>
             Dietary Preference:
             <input type="text" ref="diet" placeholder="vegan, vegetarian, etc." />
-          </label>
-          
-          <br />
+          </label>          
           <label>
             Other Comments:
             <input type="text" ref="comments" />
           </label>
-
-          <br />
           <input type="submit" value="Submit" />
         </div>
       );
@@ -86,35 +84,50 @@ class RsvpSearch extends React.Component {
             Care to tell us why?
             <input type="text" ref="comments" />
           </label>
-
-          <br />
           <input type="submit" value="Submit" />
         </div>
       );
 
       var attendingOrNot;
-      if ( this.state.attending !== null ) {
-        attendingOrNot = this.state.attending ? attending : notAttending;
+      if ( !this.state.submitted ) {
+        var partial;
+        if ( this.state.attending !== null ) {
+          partial = this.state.attending ? attending : notAttending;
+        }
+
+        attendingOrNot = (
+          <div>
+            <h3>Will you be Attending?</h3>
+
+            <RadioGroup ref="attendingGroup" name="attending" value={this.state.attending} onChange={this.handleAttendingChange.bind(this)}>
+              <label>
+                <input value="yes" type="radio" />Yes
+              </label>
+
+              <label>
+                <input value="no" type="radio" />No
+              </label>
+            </RadioGroup>
+
+            { partial }
+          </div>
+        );
+      } else if ( this.state.submitted ) {
+        attendingOrNot = <div>Thank you for RSVPing with us! We look forward to seeing you September 18!</div>;
+      }
+
+      var errorMsg;
+      if ( this.state.submissionError ) {
+        errorMsg = <div>There was a problem submitting your response! Please try again or email us at anaandnick@gmail.com</div>;
       }
 
       rsvpInfo = (
         <form onSubmit={this.handleSubmitForm.bind( this )}>
           { group }
-          <RadioGroup ref="attendingGroup" name="attending" value={this.state.attending} onChange={this.handleAttendingChange.bind(this)}>
-            
-            <h3>Will you be Attending?</h3>
-            <label>
-              <input value="yes" type="radio" />Yes
-            </label>
 
-            <label>
-              <input value="no" type="radio" />No
-            </label>
+          { attendingOrNot }
 
-            <br />
-            { attendingOrNot }
-
-          </RadioGroup>
+          { errorMsg }  
         </form>
       );
     }
@@ -133,7 +146,7 @@ class RsvpSearch extends React.Component {
           <input type="submit" value="Search" />
         </form>
 
-        { showError ? showError : '' }
+        { showSearchError ? showSearchError : '' }
         { rsvpInfo ? rsvpInfo : '' }
       </div>
     );
