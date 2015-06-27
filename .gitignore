@@ -6,3 +6,5 @@ bower_components
 test/bower_components
 auth.json
 .DS_Store
+sheet.csv
+parties.json
