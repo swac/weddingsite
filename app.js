@@ -25,7 +25,6 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get( '/api/guests', function( req, res, next ) {
   var query = url.parse( req.url, true ).query;
-  console.log( query );
 
   var first = query.first.toLowerCase();
   var last = query.last.toLowerCase();
@@ -40,44 +39,64 @@ app.get( '/api/guests', function( req, res, next ) {
   if ( party ) {
     res.status(200).send( party.members );
   } else {
-    res.status(404).end();
+    res.status(404).send();
   }
-  next();
 });
 
-var GoogleSpreadsheet = require( 'google-spreadsheet' );
-var mySheet = new GoogleSpreadsheet( '1HQH_vr6jG39NmOwhS1At-6Xwewachu3Xjf9EnGoD3ao' )
-
+var Spreadsheet = require( 'edit-google-spreadsheet' );
 var auth = require( './auth.json' );
 
-var setAuth = Promise.promisify( mySheet.setAuth, mySheet );
-var addRow = Promise.promisify( mySheet.addRow, mySheet );
+var loadSpreadsheet = Promise.promisify( Spreadsheet.load, Spreadsheet );
+
+var fs = Promise.promisifyAll( require( 'fs' ) );
 
 function submitRsvp( data ) {
   var party = data.group.map( function( elem ) {
     return elem.first + ' ' + elem.last;
   });
 
-  setAuth( auth.user, auth.pass )
-  .then( function() {
-    return addRow( 1, {
-      'Party': party.join( ', ' ),
-      'Attending': data.attending,
-      'Dietary Preference': data.diet,
-      'Comments': data.comments
-    });
+
+
+  return loadSpreadsheet({
+    debug: true,
+    spreadsheetId: '1HQH_vr6jG39NmOwhS1At-6Xwewachu3Xjf9EnGoD3ao',
+    worksheetId: 'od6',
+
+    oauth2: auth.oauth2
+  })
+  .then( function sheetReady( spreadsheet ) {
+    var receive = Promise.promisify( spreadsheet.receive, spreadsheet );
+    return Promise.join( spreadsheet, receive() );
+  })
+  .spread( function( spreadsheet, receiveResp) {
+    var plaintextParty = [ party.join(';'), data.attending, data.diet, data.comments ].join(',');
+    return Promise.join( spreadsheet, receiveResp, fs.appendFile( 'responses.txt', plaintextParty ) );
+  })
+  .spread( function( spreadsheet, receiveResp ) {
+    var info = receiveResp[ 1 ];
+
+    var obj = {};
+    obj[ info.lastRow + 1 ] = {
+      1: party.join( ', ' ),
+      2: data.attending,
+      3: data.diet,
+      4: data.comments
+    };
+
+    spreadsheet.add( obj );
+    var send = Promise.promisify( spreadsheet.send, spreadsheet );
+    return send({ autoSize: true });
   });
 }
 
 app.post( '/api/rsvp', function( req, res ) {
   submitRsvp( req.body )
   .then( function() { 
-    console.log( 'success' );
-    res.send( 200 );
+    res.sendStatus( 200 );
   })
-  .error( function() {
-    console.log( 'error' );
-    res.send( 500 );
+  .catch( function( e ) {
+    console.log( e );
+    res.sendStatus( 500 );
   });
 });
 

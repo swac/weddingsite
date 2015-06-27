@@ -5,6 +5,15 @@ var React = require( 'react' );
 var RadioGroup = require( 'react-radio-group' );
 var fetch = require( 'whatwg-fetch' );
 
+function checkStatus( response ) {
+  if (response.status >= 200 && response.status < 300) {
+    return response
+  } else {
+    var error = new Error(response.statusText)
+    error.response = response
+    throw error
+  }
+}
 class RsvpSearch extends React.Component {
   constructor( props ) {
     super(props)
@@ -41,10 +50,11 @@ class RsvpSearch extends React.Component {
       },
       body: JSON.stringify( data )
     })
+    .then( checkStatus )
     .then( () => {
       this.setState({ submitted: true });
     })
-    .error( () => {
+    .catch( ( e ) => {
       this.setState({ submissionError: true });
     });
   }
