@@ -69,7 +69,7 @@ function submitRsvp( data ) {
     return Promise.join( spreadsheet, receive() );
   })
   .spread( function( spreadsheet, receiveResp) {
-    var plaintextParty = [ party.join(';'), data.attending, data.diet, data.comments ].join(',');
+    var plaintextParty = [ party.join(';'), data.attending, data.diet, data.comments ].join(',') + '\n';
     return Promise.join( spreadsheet, receiveResp, fs.appendFile( 'responses.txt', plaintextParty ) );
   })
   .spread( function( spreadsheet, receiveResp ) {
