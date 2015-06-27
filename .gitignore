@@ -8,3 +8,5 @@ auth.json
 .DS_Store
 sheet.csv
 parties.json
+responses.txt
+get-oauth.js
