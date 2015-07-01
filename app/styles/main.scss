@@ -9,6 +9,7 @@ $bellini: rgb(251, 190, 169);
 $main-bg-color: $bellini;
 $about-bg-color: rgb(208, 234, 229);
 $pictures-bg-color: rgb(198, 191, 185);
+$weddingparty-bg-color: rgb(246, 219, 209);
 $info-bg-color: rgb(167, 200, 202);
 $rsvp-bg-color: rgb(246, 219, 209);
 
@@ -171,9 +172,38 @@ $med-break: 800px;
   }
 }
 
-#info {
-  background-color: $info-bg-color;
+#weddingparty {
+  background-color: $weddingparty-bg-color;
+  font-size: 16px;
 
+  #bride, #groom {
+    width: 100%;
+  }
+
+  @media all and (min-width: $smallest-break) {
+    .slide-content {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    #bride {
+      width: 50%;
+      order: 1;
+      flex: 1;
+    }
+
+    #groom {
+      width: 50%;
+      order: 2;
+      flex: 1;
+    }
+  }
+}
+
+#eventinfo {
+  background-color: $about-bg-color;
+  font-size: 16px;
 
   #venue-map {
     width: 100%;
@@ -201,14 +231,46 @@ $med-break: 800px;
       flex: 1;
     }
   }
+}
 
+#hotelinfo {
+  background-color: $info-bg-color;
+  font-size: 16px;
 
-
-  .address {
-    line-height: 110%;
-    font-size: 14px;
-    margin-bottom: 10px;
+  #venue-image {
+    width: 100%;
   }
+
+  .info {
+    width: 100%
+  }
+
+  @media all and (min-width: $smallest-break) {
+    .slide-content {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .info {
+      width: 50%;
+      order: 1;
+      flex: 1;
+    }
+
+    #venue-image {
+      width: 50%;
+      order: 2;
+      flex: 1;
+    }
+  }
+}
+
+.address {
+  line-height: 110%;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
 #rsvp {
